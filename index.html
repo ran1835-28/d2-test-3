@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al-Hikmah Journal | Wisdom & Heritage Application</title>
+    
+    <!-- Custom External CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts for Classical Arabic and Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@400;700&family=Inter:wght@300;400;500;600;700&family=Scheherazade+New:wght@400;700&family=Cinzel:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body id="appBody" class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between theme-transition antialiased">
+
+    <!-- TOP HEADER / APP BAR -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            
+            <!-- LOGO & BRANDING -->
+            <div class="flex items-center space-x-3 rtl:space-x-reverse">
+                <div class="w-10 h-10 rounded-xl bg-emerald-700 text-white flex items-center justify-center shadow-md shadow-emerald-700/20">
+                    <i class="fa-solid fa-book-open text-lg"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 data-i18n="headerTitle" class="font-bold text-slate-900 text-lg leading-none tracking-tight">Al-Hikmah Journal</h1>
+                        <span data-i18n="headerBadge" class="bg-emerald-100 text-emerald-800 text-[10px] font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider">Wisdom & Heritage</span>
+                    </div>
+                    <p data-i18n="headerSub" class="text-xs text-slate-500 hidden sm:block mt-0.5">Islamic Inscriptions, Prophetic Traditions & Golden Age Discoveries</p>
+                </div>
+            </div>
+
+            <!-- HEADER ACTIONS & METRICS -->
+            <div class="flex items-center space-x-2 sm:space-x-3 rtl:space-x-reverse">
+                
+                <!-- STREAK COUNTER -->
+                <div class="hidden md:flex items-center space-x-1.5 rtl:space-x-reverse bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-lg text-amber-800 text-xs font-semibold">
+                    <i class="fa-solid fa-fire text-amber-500"></i>
+                    <span id="streakCountText">3</span>
+                    <span data-i18n="streakDays" class="text-[11px] font-normal text-amber-700">Day Streak</span>
+                </div>
+
+                <!-- ARCHITECTURE INSPECTOR -->
+                <button onclick="openArchModal()" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-100 border border-slate-200 transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-layer-group text-emerald-600"></i>
+                    <span data-i18n="btnArch3Layer" class="hidden sm:inline">3-Layer Arch</span>
+                </button>
+
+                <!-- SAVED MANUSCRIPTS -->
+                <button id="openFavoritesBtn" onclick="openFavoritesModal()" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-100 border border-slate-200 transition-colors flex items-center gap-2 relative">
+                    <i class="fa-regular fa-bookmark text-emerald-600"></i>
+                    <span data-i18n="btnSavedMs" class="hidden sm:inline">Saved</span>
+                    <span id="favCountBadge" class="bg-emerald-600 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full">0</span>
+                </button>
+
+                <!-- SESSION LEDGER AUDIT -->
+                <button id="openHistoryBtn" onclick="openHistoryModal()" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-100 border border-slate-200 transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-clock-rotate-left text-amber-600"></i>
+                    <span data-i18n="btnSessionLedger" class="hidden sm:inline">Ledger</span>
+                </button>
+
+                <!-- LANGUAGE SELECTOR -->
+                <div class="relative">
+                    <select id="langSelect" class="bg-slate-100 border border-slate-200 text-slate-700 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 font-medium cursor-pointer">
+                        <option value="en">English (EN)</option>
+                        <option value="ar">العربية (AR)</option>
+                        <option value="es">Español (ES)</option>
+                        <option value="fr">Français (FR)</option>
+                        <option value="de">Deutsch (DE)</option>
+                        <option value="tr">Türkçe (TR)</option>
+                        <option value="ur">اردو (UR)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full space-y-6">
+
+        <!-- CONTROL BAR: DOMAIN, ERA & THEMES -->
+        <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5 space-y-4">
+            
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                
+                <!-- DOMAIN SELECTOR -->
+                <div class="flex flex-col space-y-1.5 flex-1">
+                    <label for="domainSelect" data-i18n="lblDomainFocus" class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Knowledge Domain Focus:</label>
+                    <select id="domainSelect" onchange="retrieveKnowledgePair()" class="bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-xl px-3.5 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 font-medium cursor-pointer">
+                        <option value="all" data-i18n="optAll">📖 All Knowledge Traditions</option>
+                        <option value="quran" data-i18n="optQuran">📖 Noble Quran (Revelation)</option>
+                        <option value="hadith" data-i18n="optHadith">📜 Prophetic Sunnah (Hadith)</option>
+                        <option value="wisdom" data-i18n="optWisdom">🧘 Classical Scholars & Ethics</option>
+                        <option value="science" data-i18n="optScience">🔬 Golden Age Science & History</option>
+                    </select>
+                </div>
+
+                <!-- CALLIGRAPHY SCRIPT SELECTOR -->
+                <div class="flex flex-col space-y-1.5 flex-1">
+                    <label for="scriptSelect" data-i18n="lblCalligraphyScript" class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Arabic Calligraphy Style:</label>
+                    <select id="scriptSelect" onchange="updateCalligraphyStyle()" class="bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-xl px-3.5 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 font-medium cursor-pointer">
+                        <option value="'Amiri', serif" selected data-i18n="optScriptAmiri">Amiri (Naskh Classical)</option>
+                        <option value="'Scheherazade New', serif" data-i18n="optScriptScheherazade">Scheherazade (Thuluth Regal)</option>
+                        <option value="'Aref Ruqaa', serif" data-i18n="optScriptRuqaa">Aref Ruqaa (Expressive Hand)</option>
+                    </select>
+                </div>
+
+                <!-- RETRIEVE PAIR BUTTON -->
+                <div class="flex items-end">
+                    <button onclick="retrieveKnowledgePair()" class="w-full lg:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm px-5 py-2.5 rounded-xl shadow-md shadow-emerald-600/20 transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                        <span data-i18n="btnRetrievePair">Retrieve Knowledge Pair</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ERA / CENTURY CHRONOLOGY scrub -->
+            <div class="pt-3 border-t border-slate-100 flex flex-col space-y-2">
+                <div class="flex justify-between items-center text-xs">
+                    <span class="font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-timeline text-emerald-600"></i>
+                        <span data-i18n="lblEraScrub">Chronological Timeline Scrub:</span>
+                    </span>
+                    <span id="selectedEraLabel" data-i18n="selectedEraLabelAll" class="text-emerald-700 font-bold">All Historical Eras</span>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
+                    <button class="era-btn active-era bg-emerald-50 text-emerald-800 border border-emerald-300 py-1.5 px-3 rounded-lg font-semibold transition-all text-center" data-era="all" onclick="filterEra('all', this)" data-i18n="eraAll">All Eras</button>
+                    <button class="era-btn bg-white text-slate-700 border border-slate-200 py-1.5 px-3 rounded-lg hover:bg-slate-50 transition-all text-center" data-era="7" onclick="filterEra('7', this)" data-i18n="era7th">7th C. (Revelation)</button>
+                    <button class="era-btn bg-white text-slate-700 border border-slate-200 py-1.5 px-3 rounded-lg hover:bg-slate-50 transition-all text-center" data-era="9" onclick="filterEra('9', this)" data-i18n="era9th">9th C. (Baghdad Wisdom)</button>
+                    <button class="era-btn bg-white text-slate-700 border border-slate-200 py-1.5 px-3 rounded-lg hover:bg-slate-50 transition-all text-center" data-era="10" onclick="filterEra('10', this)" data-i18n="era10th">10th C. (Golden Age)</button>
+                    <button class="era-btn bg-white text-slate-700 border border-slate-200 py-1.5 px-3 rounded-lg hover:bg-slate-50 transition-all text-center" data-era="11" onclick="filterEra('11', this)" data-i18n="era11th">11th-12th C. (Andalusia & Persia)</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- EQUILIBRIUM BALANCE BAR -->
+        <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+            <div class="flex justify-between items-center text-xs font-semibold mb-2">
+                <span class="text-amber-700 flex items-center gap-1.5">
+                    <i class="fa-solid fa-hands-praying"></i>
+                    <span data-i18n="lblSpiritual">Spiritual Inscription:</span> <span id="abstractPctText" class="font-bold">50%</span>
+                </span>
+                <span id="equilibriumLabel" data-i18n="lblHarmoniousSynth" class="text-slate-500 uppercase tracking-wider text-[11px]">Harmonious Synthesis</span>
+                <span class="text-emerald-700 flex items-center gap-1.5">
+                    <span data-i18n="lblEmpirical">Empirical Finding:</span> <span id="concretePctText" class="font-bold">50%</span>
+                    <i class="fa-solid fa-flask"></i>
+                </span>
+            </div>
+            <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden flex shadow-inner">
+                <div id="abstractBar" class="bg-amber-500 h-full transition-all duration-500" style="width: 50%;"></div>
+                <div id="concreteBar" class="bg-emerald-600 h-full transition-all duration-500" style="width: 50%;"></div>
+            </div>
+        </section>
+
+        <!-- SHOWCASE CARDS: DUAL PARALLEL KNOWLEDGE DISPLAY -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- CARD 1: SACRED TEXT / INSCRIPTION -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col justify-between space-y-4 hover:border-amber-300 transition-all">
+                <div class="space-y-4">
+                    <div class="flex justify-between items-start">
+                        <span data-i18n="badgeSacredText" class="bg-amber-100 text-amber-900 border border-amber-200 text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1.5">
+                            <i class="fa-solid fa-scroll text-amber-700"></i> Sacred Text / Inscription
+                        </span>
+                        <button onclick="speakText('inscription')" class="text-slate-400 hover:text-emerald-600 transition-colors p-1" title="Listen Audio">
+                            <i class="fa-solid fa-volume-high text-base"></i>
+                        </button>
+                    </div>
+
+                    <!-- ARABIC TEXT (Always in Classical Arabic) -->
+                    <div id="inscriptionArabic" class="text-right text-2xl leading-loose font-amiri text-slate-900 font-bold p-3 bg-amber-50/40 rounded-xl border border-amber-100/60" dir="rtl">
+                        يَرْفَعِ اللَّهُ الَّذِينَ آمَنُوا مِنكُمْ وَالَّذِينَ أُوتُوا الْعِلْمَ دَرَجَاتٍ
+                    </div>
+
+                    <!-- TRANSLATED TEXT -->
+                    <p id="inscriptionTranslation" class="text-slate-700 text-sm leading-relaxed italic">
+                        "Allah will raise those who have believed among you and those who were given knowledge, by degrees."
+                    </p>
+
+                    <!-- CITATION / SOURCE -->
+                    <div class="text-xs text-slate-500 border-t border-slate-100 pt-3">
+                        <p class="font-semibold text-slate-700" data-i18n="lblPrimarySource">Primary Source & Attributed Narrator:</p>
+                        <p id="inscriptionSource" class="text-slate-600">Surah Al-Mujadila (58:11)</p>
+                    </div>
+                </div>
+
+                <!-- CARD 1 ACTIONS -->
+                <div class="flex items-center justify-between pt-2">
+                    <button onclick="openIsnadModal()" class="text-xs text-amber-800 hover:text-amber-900 font-medium flex items-center gap-1 bg-amber-50 px-2.5 py-1.5 rounded-lg border border-amber-200 hover:bg-amber-100 transition-colors">
+                        <i class="fa-solid fa-diagram-project"></i>
+                        <span data-i18n="btnChainIsnad">Chain (Isnad)</span>
+                    </button>
+                    <button id="saveInscriptionBtn" onclick="saveCurrentItem('quote')" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-800 font-medium px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5">
+                        <i class="fa-regular fa-bookmark"></i>
+                        <span data-i18n="btnSaveInscription">Save Inscription</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- CARD 2: HISTORICAL / SCIENTIFIC OBSERVATION -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col justify-between space-y-4 hover:border-emerald-300 transition-all">
+                <div class="space-y-4">
+                    <div class="flex justify-between items-start">
+                        <span data-i18n="badgeHistoricalObs" class="bg-emerald-100 text-emerald-900 border border-emerald-200 text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1.5">
+                            <i class="fa-solid fa-atom text-emerald-700"></i> Historical & Empirical Observation
+                        </span>
+                        <button onclick="speakText('observation')" class="text-slate-400 hover:text-emerald-600 transition-colors p-1" title="Listen Audio">
+                            <i class="fa-solid fa-volume-high text-base"></i>
+                        </button>
+                    </div>
+
+                    <!-- ARABIC / ORIGINAL RECORD -->
+                    <div id="observationArabic" class="text-right text-xl leading-relaxed font-amiri text-slate-900 font-bold p-3 bg-emerald-50/40 rounded-xl border border-emerald-100/60" dir="rtl">
+                        الشُّعَاعُ يَخْرُجُ مِنَ الأَجْسَامِ المَضِيئَةِ إِلَى العَيْنِ فَتَبْصُرُهَا
+                    </div>
+
+                    <!-- TRANSLATED TEXT -->
+                    <p id="observationTranslation" class="text-slate-700 text-sm leading-relaxed">
+                        Light rays emit from luminous objects to the eye, rather than rays emanating from the eye—establishing the foundations of modern optics and experimental physics.
+                    </p>
+
+                    <!-- CITATION / SOURCE -->
+                    <div class="text-xs text-slate-500 border-t border-slate-100 pt-3">
+                        <p class="font-semibold text-slate-700" data-i18n="lblCitedSource">Cited Historical / Academic Source:</p>
+                        <p id="observationSource" class="text-slate-600">Ibn al-Haytham (Alhazen), Kitab al-Manazir (Book of Optics, c. 1021 CE)</p>
+                    </div>
+                </div>
+
+                <!-- CARD 2 ACTIONS -->
+                <div class="flex items-center justify-between pt-2">
+                    <span class="text-xs text-emerald-800 bg-emerald-50 px-2.5 py-1.5 rounded-lg border border-emerald-200 font-medium flex items-center gap-1">
+                        <i class="fa-solid fa-certificate"></i>
+                        <span data-i18n="badgePeerVerified">Peer-Verified</span>
+                    </span>
+                    <button id="saveObservationBtn" onclick="saveCurrentItem('fact')" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-800 font-medium px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5">
+                        <i class="fa-regular fa-bookmark"></i>
+                        <span data-i18n="btnSaveObservation">Save Observation</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTEMPLATION & SYNTHESIS PROMPT CARD -->
+        <section class="bg-gradient-to-r from-emerald-900 to-slate-900 text-white rounded-2xl p-6 shadow-md space-y-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-brain text-emerald-400 text-lg"></i>
+                    <h3 data-i18n="titleSynthesis" class="font-bold text-base text-white">Synthesis & Philosophical Reflection Prompt</h3>
+                </div>
+                <span data-i18n="badgeTafakkur" class="bg-emerald-800/80 text-emerald-200 text-[11px] font-semibold px-2.5 py-0.5 rounded-full border border-emerald-700">Contemplation Engine (Tafakkur)</span>
+            </div>
+
+            <p id="synthesisPromptText" class="text-slate-200 text-sm leading-relaxed font-serif italic">
+                How does the spiritual imperative to seek truth drive empirical methodology in medieval Islamic scientific breakthroughs?
+            </p>
+
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-700/60">
+                <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                    <button id="copyPromptBtn" onclick="copySynthesisPrompt()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium px-3 py-1.5 rounded-lg border border-slate-700 transition-colors flex items-center gap-1.5">
+                        <i class="fa-regular fa-copy"></i>
+                        <span data-i18n="btnCopyPrompt">Copy Reflection Prompt</span>
+                    </button>
+                    <button onclick="generateNewSynthesisPrompt()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                        <span data-i18n="btnNewSynthesis">New Synthesis Question</span>
+                    </button>
+                </div>
+                <button onclick="openQuizModal()" class="bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold px-4 py-1.5 rounded-lg shadow-sm transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <span data-i18n="btnQuizMode">Take Knowledge Quiz</span>
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <p data-i18n="footerCopyright">© Al-Hikmah Digital Humanities Research Initiative. MGIS130 Compliant Architecture.</p>
+            <p class="font-mono text-[11px]"><span data-i18n="footerSystemStatus">System Status:</span> <span data-i18n="footerActiveSynced" class="text-emerald-600 font-bold">● Active & Synced</span></p>
+        </div>
+    </footer>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+    <!-- MODAL 1: SAVED MANUSCRIPTS -->
+    <div id="favoritesModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm hidden p-4">
+        <div class="bg-white max-w-2xl w-full rounded-2xl p-6 max-h-[90vh] flex flex-col justify-between shadow-2xl">
+            <div>
+                <div class="flex items-center justify-between border-b border-slate-200 pb-3 mb-4">
+                    <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                        <i class="fa-solid fa-bookmark text-emerald-600 text-lg"></i>
+                        <h2 data-i18n="savedTitle" class="font-bold text-lg text-slate-900">Saved Manuscripts & Observations</h2>
+                    </div>
+                    <button onclick="closeFavoritesModal()" class="text-slate-400 hover:text-slate-600 text-lg p-1">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <p data-i18n="savedSubtitle" class="text-xs text-slate-500 mb-4">Your personal library of bookmarked inscriptions, scientific records, and citations.</p>
+
+                <div id="favoritesList" class="space-y-3 mb-4 max-h-[50vh] overflow-y-auto pr-1">
+                    <!-- Dynamically rendered -->
+                </div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-200 flex items-center justify-between gap-3 text-xs">
+                <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                    <button onclick="exportFavoritesCSV()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-medium flex items-center gap-1">
+                        <i class="fa-solid fa-file-csv text-emerald-600"></i> <span data-i18n="btnExportCsv">Export CSV</span>
+                    </button>
+                    <button onclick="exportFavoritesJSON()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-medium flex items-center gap-1">
+                        <i class="fa-solid fa-file-code text-amber-600"></i> <span data-i18n="btnExportJson">Export JSON</span>
+                    </button>
+                </div>
+                <button onclick="clearAllFavorites()" class="text-rose-600 hover:bg-rose-50 px-3 py-1.5 rounded-lg border border-rose-200 font-semibold transition-colors flex items-center gap-1">
+                    <i class="fa-solid fa-trash-can"></i> <span data-i18n="btnClearAllSaved">Clear All</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: SESSION AUDIT LEDGER -->
+    <div id="historyModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm hidden p-4">
+        <div class="bg-white max-w-3xl w-full rounded-2xl p-6 max-h-[90vh] flex flex-col justify-between shadow-2xl">
+            <div>
+                <div class="flex items-center justify-between border-b border-slate-200 pb-3 mb-3">
+                    <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                        <i class="fa-solid fa-clock-rotate-left text-amber-600 text-lg"></i>
+                        <h2 data-i18n="auditTitle" class="font-bold text-lg text-slate-900">Session Audit Ledger & Telemetry</h2>
+                    </div>
+                    <button onclick="closeHistoryModal()" class="text-slate-400 hover:text-slate-600 text-lg p-1">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <p data-i18n="auditSubtitle" class="text-xs text-slate-500 mb-4">Real-time system logging, architectural telemetry, and integrity hashes (MGIS130 Compliance).</p>
+
+                <!-- TELEMETRY CARDS -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs mb-4">
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        <p data-i18n="lblTotalRetrieved" class="text-[10px] text-slate-500 uppercase font-bold">Total Retrieved</p>
+                        <p id="auditTotalRetrieved" class="text-lg font-bold text-emerald-700 mt-0.5">0</p>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        <p data-i18n="lblTotalSaved" class="text-[10px] text-slate-500 uppercase font-bold">Total Saved</p>
+                        <p id="auditTotalSaved" class="text-lg font-bold text-amber-700 mt-0.5">0</p>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        <p data-i18n="lblActiveTheme" class="text-[10px] text-slate-500 uppercase font-bold">Active Mode</p>
+                        <p id="auditActiveTheme" class="text-xs font-bold text-slate-800 mt-1 capitalize">Modern Slate</p>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        <p data-i18n="lblSystemStatus" class="text-[10px] text-slate-500 uppercase font-bold">System Status</p>
+                        <p class="text-xs font-bold text-emerald-600 mt-1 flex items-center gap-1">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> <span data-i18n="statusHealthy">Healthy</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- AUDIT TABLE -->
+                <div class="overflow-x-auto border border-slate-200 rounded-xl mb-4 max-h-[40vh]">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-100 text-slate-600 uppercase border-b border-slate-200 sticky top-0 font-semibold">
+                            <tr>
+                                <th data-i18n="thTimestamp" class="p-2.5">Timestamp</th>
+                                <th data-i18n="thAction" class="p-2.5">Action / Event</th>
+                                <th data-i18n="thDomain" class="p-2.5">Domain</th>
+                                <th data-i18n="thDetail" class="p-2.5">Details</th>
+                                <th data-i18n="thProofHash" class="p-2.5">Hash</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody" class="divide-y divide-slate-200 bg-white">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-200 flex items-center justify-between gap-3 text-xs">
+                <button onclick="clearAuditHistory()" class="text-rose-600 hover:bg-rose-50 px-3 py-1.5 rounded-lg border border-rose-200 font-semibold transition-colors flex items-center gap-1">
+                    <i class="fa-solid fa-trash-can"></i> <span data-i18n="btnClearLogs">Clear Logs</span>
+                </button>
+                <button onclick="printAuditLedger()" class="bg-slate-800 hover:bg-slate-700 text-white px-3 py-1.5 rounded-lg font-semibold transition-colors flex items-center gap-1">
+                    <i class="fa-solid fa-print"></i> <span data-i18n="btnPrintLedger">Print Report</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: KNOWLEDGE QUIZ -->
+    <div id="quizModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm hidden p-4">
+        <div class="bg-white max-w-lg w-full rounded-2xl p-6 max-h-[90vh] overflow-y-auto relative shadow-2xl">
+            <button onclick="closeQuizModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-lg p-1">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="flex items-center space-x-2 rtl:space-x-reverse text-amber-700 mb-2">
+                <i class="fa-solid fa-brain text-xl"></i>
+                <h2 data-i18n="quizTitle" class="font-bold text-lg text-slate-900">Islamic Wisdom & Science Quiz</h2>
+            </div>
+            <p data-i18n="quizSubtitle" class="text-xs text-slate-500 mb-4 border-b border-slate-200 pb-2">Test your understanding of classical inscriptions, scientific breakthroughs, and historical chains.</p>
+
+            <!-- QUIZ HEADER -->
+            <div class="flex justify-between items-center text-xs font-semibold mb-4 bg-slate-50 p-3 rounded-xl border border-slate-200">
+                <div>
+                    <span data-i18n="quizQuestionCount">Question</span> <span id="quizQuestionNum">1</span> <span data-i18n="quizOf">of</span> <span id="quizTotalNum">3</span>
+                </div>
+                <div>
+                    <span data-i18n="quizScore">Score</span>: <span id="quizCurrentScore" class="text-emerald-700 font-bold">0</span>
+                </div>
+            </div>
+
+            <!-- QUIZ CONTAINER -->
+            <div id="quizContainer">
+                <p id="quizQuestionText" class="text-slate-900 font-semibold text-base mb-4"></p>
+                <div id="quizOptions" class="flex flex-col space-y-2 mb-4">
+                    <!-- Option buttons dynamically generated -->
+                </div>
+                <div class="flex justify-end">
+                    <button id="nextQuizBtn" onclick="nextQuizQuestion()" class="hidden bg-emerald-600 text-white px-4 py-2 text-xs font-bold rounded-xl hover:bg-emerald-700 transition-all">
+                        <span data-i18n="quizNext">Next Question</span> <i class="fa-solid fa-arrow-right ml-1 rtl-flip"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- QUIZ RESULTS -->
+            <div id="quizResults" class="hidden text-center py-6">
+                <i class="fa-solid fa-trophy text-4xl text-amber-500 mb-3"></i>
+                <h3 data-i18n="quizResultsTitle" class="font-bold text-xl text-slate-900 mb-2">Quiz Completed!</h3>
+                <p class="text-sm text-slate-600 mb-4">
+                    <span data-i18n="quizYourScore">Your Final Score:</span> <span id="quizFinalScore" class="font-bold text-emerald-700 text-lg">0/3</span>
+                </p>
+                <p id="quizScoreMsg" class="text-xs text-slate-500 italic mb-6 px-4"></p>
+                <button onclick="restartQuiz()" class="bg-slate-800 hover:bg-slate-700 text-white px-5 py-2.5 text-xs font-bold rounded-xl transition-all">
+                    <i class="fa-solid fa-rotate-left mr-1"></i> <span data-i18n="quizRestart">Restart Quiz</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4: 3-LAYER ARCHITECTURE SPECIFICATION -->
+    <div id="archModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm hidden p-4">
+        <div class="bg-white max-w-2xl w-full rounded-2xl p-6 max-h-[90vh] overflow-y-auto relative shadow-2xl">
+            <button onclick="closeArchModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-lg p-1">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="flex items-center space-x-2 rtl:space-x-reverse text-emerald-700 mb-2">
+                <i class="fa-solid fa-layer-group text-xl"></i>
+                <h2 data-i18n="archTitle" class="font-bold text-lg text-slate-900">3-Layer Software Architecture Specification</h2>
+            </div>
+            <p data-i18n="archSubtitle" class="text-xs text-slate-500 mb-4 border-b border-slate-200 pb-2">MGIS130 Enterprise Architecture mapping: User Interface, Business Processing, and Data Access Layers.</p>
+
+            <div class="space-y-4 text-xs">
+                <div class="p-3.5 bg-emerald-50 rounded-xl border border-emerald-200">
+                    <h4 data-i18n="archLayer1" class="font-bold text-emerald-900 text-sm mb-1">Layer 1: User Interface (UI)</h4>
+                    <p data-i18n="archLayer1Desc" class="text-emerald-800 leading-relaxed">Tailwind CSS, Responsive Canvas, Dynamic Themes, Web Speech TTS Synthesis, i18n Localization.</p>
+                </div>
+                <div class="p-3.5 bg-amber-50 rounded-xl border border-amber-200">
+                    <h4 data-i18n="archLayer2" class="font-bold text-amber-900 text-sm mb-1">Layer 2: Business Logic & Processing</h4>
+                    <p data-i18n="archLayer2Desc" class="text-amber-800 leading-relaxed">Equilibrium Engine (Spiritual vs Empirical balance), Contemplation Generator, Isnad Network Graph, Era Chronology Filtering.</p>
+                </div>
+                <div class="p-3.5 bg-slate-100 rounded-xl border border-slate-200">
+                    <h4 data-i18n="archLayer3" class="font-bold text-slate-900 text-sm mb-1">Layer 3: Data Access & Persistence</h4>
+                    <p data-i18n="archLayer3Desc" class="text-slate-700 leading-relaxed">Structured Inscriptions & History DB, Session Ledger Audit Hash Verification, Local Favorites Persistence Engine.</p>
+                </div>
+            </div>
+
+            <div class="mt-6 flex justify-end">
+                <button onclick="closeArchModal()" class="bg-slate-800 text-white px-4 py-2 text-xs font-semibold rounded-xl" data-i18n="btnClose">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 5: ISNAD CHAIN ANALYSIS -->
+    <div id="isnadModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm hidden p-4">
+        <div class="bg-white max-w-lg w-full rounded-2xl p-6 max-h-[90vh] overflow-y-auto relative shadow-2xl">
+            <button onclick="closeIsnadModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-lg p-1">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="flex items-center space-x-2 rtl:space-x-reverse text-amber-700 mb-2">
+                <i class="fa-solid fa-diagram-project text-xl"></i>
+                <h2 data-i18n="isnadTitle" class="font-bold text-lg text-slate-900">Chain of Transmission (Isnad)</h2>
+            </div>
+            <p data-i18n="isnadSubtitle" class="text-xs text-slate-500 mb-4 border-b border-slate-200 pb-2">Visualizing biographical evaluation (Ilm al-Rijal) and transmission lineage.</p>
+
+            <div class="space-y-3 text-xs font-mono">
+                <div class="flex items-center gap-2 p-2.5 bg-slate-50 rounded-lg border border-slate-200">
+                    <span class="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-[10px]">1</span>
+                    <div>
+                        <p data-i18n="isnadStep1Title" class="font-bold text-slate-800">Compiling Scholar (Imam Bukhari / Muslim)</p>
+                        <p data-i18n="isnadStep1Sub" class="text-[10px] text-slate-500">Authenticated Transmission Node</p>
+                    </div>
+                </div>
+                <div class="flex justify-center text-slate-400"><i class="fa-solid fa-arrow-down"></i></div>
+                <div class="flex items-center gap-2 p-2.5 bg-slate-50 rounded-lg border border-slate-200">
+                    <span class="w-6 h-6 rounded-full bg-amber-600 text-white flex items-center justify-center font-bold text-[10px]">2</span>
+                    <div>
+                        <p data-i18n="isnadStep2Title" class="font-bold text-slate-800">Primary Transmitter Node (Thiqah / Trustworthy)</p>
+                        <p data-i18n="isnadStep2Sub" class="text-[10px] text-slate-500">Biographical Grade: High Reliability</p>
+                    </div>
+                </div>
+                <div class="flex justify-center text-slate-400"><i class="fa-solid fa-arrow-down"></i></div>
+                <div class="flex items-center gap-2 p-2.5 bg-amber-50 rounded-lg border border-amber-200">
+                    <span class="w-6 h-6 rounded-full bg-amber-700 text-white flex items-center justify-center font-bold text-[10px]">3</span>
+                    <div>
+                        <p data-i18n="isnadStep3Title" class="font-bold text-amber-900">Companion Narrator (Sahabi)</p>
+                        <p data-i18n="isnadStep3Sub" class="text-[10px] text-amber-700">Direct Source Lineage</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs text-emerald-900">
+                <span data-i18n="isnadAuthenticity" class="font-bold">Authenticity Grade:</span> <span data-i18n="isnadGradeSahih" class="font-semibold">Sahih (Rigorously Verified)</span>
+            </div>
+
+            <div class="mt-6 flex justify-end">
+                <button onclick="closeIsnadModal()" class="bg-slate-800 text-white px-4 py-2 text-xs font-semibold rounded-xl" data-i18n="btnClose">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Logic Script placed at end of body so DOM is fully accessible -->
+    <script src="script.js"></script>
+</body>
+</html>
